@@ -1,0 +1,16 @@
+{
+ "curator.name": "CBMPyFROGG",
+ "curator.version": "0.4.9",
+ "curator.url": "http://145.38.197.206:80/",
+ "curator.date": "2022-11-18-10-02",
+ "curator.id": "frogg hackathon",
+ "curator.sessionid": "cbmpyfrogg-11484026-52752918",
+ "software.name": "cbmpy",
+ "software.version": "0.8.4",
+ "software.url": "https://github.com/SystemsBioinformatics/cbmpy",
+ "software.environment": "Linux 5.4.0-121-generic (64bit)",
+ "solver.name": "cbmpy",
+ "solver.version": "0.2",
+ "model.filename": "Gmetallireducens_ac_FeUpdated.(11484025475845927).xml",
+ "model.md5": "f285feef71ab036133c2f9936e361b5d"
+}

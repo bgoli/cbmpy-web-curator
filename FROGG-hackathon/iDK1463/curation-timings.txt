@@ -1,0 +1,4 @@
+# FBA Curation Report 2022-11-18-10:29
+Load model: 4.69s
+Test FVA: 37.29s
+Total time: 41.98s
