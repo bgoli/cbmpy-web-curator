@@ -1,7 +1,0 @@
-# FBA Curation Report 2022-11-18-10:02
-Load model: 1.08s
-Test objective: 0.13s
-Test FVA: 10.77s
-Test gene deletions: 2.98s
-Test reaction deletions: 6.23s
-Total time: 21.19s

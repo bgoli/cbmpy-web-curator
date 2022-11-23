@@ -1,0 +1,4 @@
+# FBA Curation Report 2022-11-23-06:06
+Load model: 26.95s
+Test reaction deletions: 348.17s
+Total time: 375.12s
