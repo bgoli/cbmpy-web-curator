@@ -1,5 +1,7 @@
-# cbmpy-web-curator
-A web-based curation tool for genome scale, constraint-based models
+# CBMPyWeb 
+A web-based curation tool for genome scale, constraint-based models developed by bgoli (https://github.com/bgoli). Links to the active servers, documentation, a wiki, downloadable packages and more are now available on the CBMPyWeb OSF.io project pages.
+
+https://osf.io/t6mh3/
 
 ## offline-curator
 
@@ -19,7 +21,7 @@ python offline_curator.py <model-directory>
 Results of the analysis will be output in the model input directory.
 
 
-## Curation test models
+## Curatable test models
 - frogg: FROGG analysis development models
 - general: random selection of models
 
@@ -28,4 +30,4 @@ Results of the analysis will be output in the model input directory.
 Models and reference results implemented as part of the FROGG-hackathon.
 
 
-
+(C) Brett G. Olivier, Amsterdam, 2021 - 2022.
