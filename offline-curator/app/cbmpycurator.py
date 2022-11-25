@@ -4,29 +4,15 @@ import cbmpy
 # TODO TODO TODO # THIS NEEDS TO BE DONE VIA CONFIG
 # multicore python bin hack
 
-if os.path.exists('c:\\Anaconda3\\envs\\flaskdev\\python.exe'):
-    cbmpy.__CBCONFIG__['MULTICORE_PYTHON_BIN_OVERRIDE'] = 'c:\\Anaconda3\\envs\\flaskdev\\python.exe'
-else:
-    cbmpy.__CBCONFIG__['MULTICORE_PYTHON_BIN_OVERRIDE'] = '/home/bolivier/frogg-app/venv/bin/python3'
+# if os.path.exists('c:\\Anaconda3\\envs\\flaskdev\\python.exe'):
+#     cbmpy.__CBCONFIG__['MULTICORE_PYTHON_BIN_OVERRIDE'] = 'c:\\Anaconda3\\envs\\flaskdev\\python.exe'
+# else:
+#     cbmpy.__CBCONFIG__['MULTICORE_PYTHON_BIN_OVERRIDE'] = '/home/bolivier/frogg-app/venv/bin/python3'
+
+cbmpy.__CBCONFIG__['MULTICORE_PYTHON_BIN_OVERRIDE'] = os.sys.executable
+
 print('MULTICORE PATH {}'.format(cbmpy.__CBCONFIG__['MULTICORE_PYTHON_BIN_OVERRIDE']))
 
-
-#{
- #"curator.name": "CBMPyWeb",
- #"curator.version": "0.3.0",
- #"curator.url": "http://curator.fame-vu.surf-hosted.nl:5000/",
- #"curator.date": "",
- #"curator.id": "",
- #"curator.sessionid": "",
- #"software.name": "cbmpy",
- #"software.version": "0.8.0",
- #"software.url": "https://github.com/SystemsBioinformatics/cbmpy",
- #"software.environment": "Linux 4.15.0-118-generic (64bit)",
- #"solver.name": "CPLEX",
- #"solver.version": "12.10.0.0",
- #"model.filename": "",
- #"model.md5": ""
-#}
 
 def hashFileMd5(fpath):
     md5_hash = hashlib.md5()
