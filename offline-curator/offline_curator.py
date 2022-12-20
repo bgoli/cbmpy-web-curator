@@ -12,24 +12,34 @@ try:
 except:
     # debugging hack
     print('{} does not seem to exist'.format(os.sys.argv[1]))
-    
+
 
 def write_config(fpath, filename):
     config = {
-     "curator.name": "CBMPyWEB offline-curator",
-     "curator.version": "0.1",
-     "curator.url": "",
-     "curator.date": "",
-     "curator.id": "",
-     "curator.sessionid": "",
-     "software.name": "cbmpy",
-     "software.version": str(cbmpy.__version__),
-     "software.url": "https://github.com/SystemsBioinformatics/cbmpy",
-     "software.environment": "{} {} ({})".format(platform.system(), platform.release(), platform.architecture()[0]),
-     "solver.name": "cbmpy",
-     "solver.version": "0.2",
-     "model.filename": "{}".format(filename),
-     "model.md5": "" }
+        "frog_date": "",
+        "frog_version": "1.0",
+        "frog_curators": [],
+        "frog_software": {
+            "name": "cbmpyweb offline-curator",
+            "version": "0.1",
+            "url": "https://osf.io/t6mh3"
+        },
+
+        "software": {
+            "name": "cbmpy",
+            "version": str(cbmpy.__version__),
+            "url": "https://systemsbioinformatics.github.io/cbmpy"
+        },
+        "solver": {
+            "name": "cbmpy",
+            "version": "0.1",
+            "url": ""
+        },
+        "model_filename": "{}".format(filename),
+        "model_md5": "",
+        "environment": "{} {} ({})".format(platform.system(), platform.release(), platform.architecture()[0]),
+    }
+
     fpath = os.path.join(fpath, 'metadata.json')
     import json
     with open(fpath, 'w') as F:
@@ -60,8 +70,8 @@ for m_ in model_files:
         RESULT_DIR = os.path.join(MODEL_DIR, 'result-{}'.format(m_[:-4]))
     if not os.path.exists(RESULT_DIR):
         os.makedirs(RESULT_DIR)
-    
-    
+
+
     if not os.path.exists(os.path.join(RESULT_DIR, 'metadata.json')):
         write_config(RESULT_DIR, m_)
 

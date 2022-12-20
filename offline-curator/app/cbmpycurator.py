@@ -29,21 +29,32 @@ def readMetadata(fpath):
         print(metadata)
     return metadata
 
-def writeMetadata(fpath, metadata):
-    F = open(os.path.join(fpath, 'metadata.json'), 'w')
+def writeMetadata(fname, fpath, metadata):
+    F = open(os.path.join(fpath, fname), 'w')
     print(metadata)
     json.dump(metadata, F, indent=' ')
     F.close()
 
 def addMetadata(pathin, pathout, model_file, curator_id):
     mdat = readMetadata(pathin)
-    mdat['curator.id'] = curator_id
-    mdat['curator.date'] = time.strftime('%Y-%m-%d-%H-%M')
-    mdat['curator.sessionid'] = '{}-{}'.format(mdat['curator.name'].lower().replace(' ', '-'), str(time.monotonic()).replace('.', '-'))
-    mdat['model.filename'] = model_file
-    mdat['model.md5'] = hashFileMd5(os.path.join(pathin, model_file))
-    writeMetadata(pathout, mdat)
+    mdat['frog_curators'] = [curator_id]
+    mdat['frog_date'] = time.strftime('%Y-%m-%d-%H-%M')
+    mdat['frogg_sessionid'] = '{}-{}'.format(mdat['frog_curators'][0].lower().replace(' ', '-'), str(time.monotonic()).replace('.', '-'))
+    mdat['model_filename'] = model_file
+    mdat['model_md5'] = hashFileMd5(os.path.join(pathin, model_file))
+    writeMetadata('metadata.json', pathout, mdat)
     return mdat
+
+def addCombineMetadata(pathin, pathout, model_file, curator_id):
+    with open(os.path.join(pathout, 'metadata.rdf'), 'w') as F:
+        F.write(generateCOMBINEarchiveMetadata('CBMPy', curator_id))
+
+    with open(os.path.join(pathout, 'manifest.xml'), 'w') as F:
+        F.write(generateCombineArchiveManifest(pathin, pathout, model_file))
+
+
+
+
 
 def testObjective(m, result_path, tool_id, sigfig=6, metadata=None):
     report_name = '01_objective.tsv'
@@ -94,7 +105,7 @@ def testFVA(m, result_path, tool_id, sigfig=6, metadata=None, override_bin=cbmpy
         pass
     if not os.path.exists(result_path):
         os.makedirs(result_path)
-        
+
     # get the current obj value for output
     cbmpy.doFBA(m)
 
@@ -109,7 +120,7 @@ def testFVA(m, result_path, tool_id, sigfig=6, metadata=None, override_bin=cbmpy
 
     # do FVA
     optPercentage = 100.0
-    
+
     if len(m.getReactionIds()) <= 1000:
         fvals, fids = cbmpy.doFVA(m, optPercentage=100.0)
     elif len(m.getReactionIds()) <= 3000:
@@ -284,8 +295,75 @@ def writeTSV(f, data):
                 f.write('{}\n'.format(r_[c_]))
 
 
+def generateCombineArchiveManifest(in_dir, out_dir, model_file):
+#     tsv_files = ['01_objective.tsv', '02_fva.tsv', '03_gene_deletion.tsv', '04_reaction_deletion.tsv']
+#     mdat_files = ['curation-timings.txt', 'metadata.json', 'metadata.rdf']
+
+    man_out = """<?xml version="1.0" encoding="UTF-8"?>
+<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">
+ <content location="." format="https://identifiers.org/combine.specifications:omex"/>
+ <content location="./manifest.xml" format="https://identifiers.org/combine.specifications:omex-manifest"/>\n"""
+
+    if os.path.exists(out_dir):
+        for f_ in os.listdir(out_dir):
+            print(f_)
+            if f_ == 'metadata.rdf':
+                man_out += '<content location="./metadata.rdf" format="http://identifiers.org/combine.specifications/omex-metadata"/>\n'
+            elif f_ == 'metadata.json':
+                man_out += ' <content location="./metadata.json" format="https://identifiers.org/combine.specifications:frog-metadata-version-1"/>\n'
+            elif f_ == 'curation-timings.txt':
+                man_out += ' <content location="./curation-timings.txt" format="text/plain"/>\n'
+            elif f_ == '01_objective.tsv':
+                man_out += ' <content location="./01_objective.tsv" format="https://identifiers.org/combine.specifications:frog-objective-version-1"/>\n'
+            elif f_ == '02_fva.tsv':
+                man_out += ' <content location="./02_fva.tsv" format="https://identifiers.org/combine.specifications:frog-fva-version-1"/>\n'
+            elif f_ == '03_gene_deletion.tsv':
+                man_out += ' <content location="./03_gene_deletion.tsv" format="https://identifiers.org/combine.specifications:frog-genedeletion-version-1"/>\n'
+            elif f_ == '04_reaction_deletion.tsv':
+                man_out += ' <content location="./04_reaction_deletion.tsv" format="https://identifiers.org/combine.specifications:frog-reactiondeletion-version-1"/>\n'
+    man_out += ' <content location="./{}" format="https://identifiers.org/combine.specifications:sbml" master="true"/>\n'.format(model_file)
+    man_out += "</omexManifest>\n"
+    return man_out
+
+def generateCOMBINEarchiveMetadata(tool_name, creator):
+    return """
+<?xml version="1.0" encoding="UTF-8"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dcterms="http://purl.org/dc/terms/"
+    xmlns:vCard="http://www.w3.org/2006/vcard/ns#"
+    xmlns:bqmodel="http://biomodels.net/models-qualifiers">
+ <rdf:Description rdf:about=".">
+ <dcterms:creator>
+ <rdf:Bag>
+  <rdf:li rdf:parseType="Resource">
+   <vCard:hasName rdf:parseType="Resource">
+    <vCard:family-name>{}</vCard:family-name>
+    <vCard:given-name>{}</vCard:given-name>
+   </vCard:hasName>
+   <vCard:hasEmail rdf:resource="" />
+   <vCard:organization-name>
+
+   </vCard:organization-name>
+  </rdf:li>
+ </rdf:Bag>
+ </dcterms:creator>
+   <dcterms:created rdf:parseType="Resource">
+    <dcterms:W3CDTF>{}</dcterms:W3CDTF>
+   </dcterms:created>
+   <dcterms:modified rdf:parseType="Resource">
+    <dcterms:W3CDTF>{}</dcterms:W3CDTF>
+   </dcterms:modified>
+ </rdf:Description>
+</rdf:RDF>
+""".format(tool_name, creator, time.strftime('%Y-%m-%d %H:%M'), time.strftime('%Y-%m-%d %H:%M'))
+
+
+
+
+
+
 if __name__ == '__main__':
-    # moving this into a separate offline runner outside of app - bgoli 
+    # moving this into a separate offline runner outside of app - bgoli
     cDir = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 
 
