@@ -1,0 +1,23 @@
+{
+ "frog_date": "",
+ "frog_version": "1.0",
+ "frog_curators": [],
+ "frog_software": {
+  "name": "cbmpyweb offline-curator",
+  "version": "0.1",
+  "url": "https://osf.io/t6mh3"
+ },
+ "software": {
+  "name": "cbmpy",
+  "version": "0.8.4",
+  "url": "https://systemsbioinformatics.github.io/cbmpy"
+ },
+ "solver": {
+  "name": "cbmpy",
+  "version": "0.1",
+  "url": ""
+ },
+ "model_filename": "",
+ "model_md5": "",
+ "environment": "Windows 10 (64bit)"
+}

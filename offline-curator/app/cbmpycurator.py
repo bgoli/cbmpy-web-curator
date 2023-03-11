@@ -23,17 +23,20 @@ def hashFileMd5(fpath):
     print(digest)
     return digest
 
+
 def readMetadata(fpath):
     with open(os.path.join(fpath, 'metadata.json'), 'r') as F:
         metadata = json.load(F)
         print(metadata)
     return metadata
 
+
 def writeMetadata(fname, fpath, metadata):
     F = open(os.path.join(fpath, fname), 'w')
     print(metadata)
     json.dump(metadata, F, indent=' ')
     F.close()
+
 
 def addMetadata(pathin, pathout, model_file, curator_id):
     mdat = readMetadata(pathin)
@@ -45,15 +48,13 @@ def addMetadata(pathin, pathout, model_file, curator_id):
     writeMetadata('metadata.json', pathout, mdat)
     return mdat
 
+
 def addCombineMetadata(pathin, pathout, model_file, curator_id):
     with open(os.path.join(pathout, 'metadata.rdf'), 'w') as F:
         F.write(generateCOMBINEarchiveMetadata('CBMPy', curator_id))
 
     with open(os.path.join(pathout, 'manifest.xml'), 'w') as F:
         F.write(generateCombineArchiveManifest(pathin, pathout, model_file))
-
-
-
 
 
 def testObjective(m, result_path, tool_id, sigfig=6, metadata=None):

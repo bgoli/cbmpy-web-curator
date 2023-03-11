@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<omexManifest xmlns="http://identifiers.org/combine.specifications/omex-manifest">
+  <content location="." format="https://identifiers.org/combine.specifications:omex" />
+  <content location="./manifest.xml" format="https://identifiers.org/combine.specifications:omex-manifest" />
+  <content location="./iJR904.xml" format="https://identifiers.org/combine.specifications:sbml" master="true" />
+  <content location="./FROG/frog.json" format="https://identifiers.org/combine.specifications:frog-json-version-1" />
+  <content location="./FROG/metadata.json" format="https://identifiers.org/combine.specifications:frog-metadata-version-1" />
+  <content location="./FROG/01_objective.tsv" format="https://identifiers.org/combine.specifications:frog-objective-version-1" />
+  <content location="./FROG/02_fva.tsv" format="https://identifiers.org/combine.specifications:frog-fva-version-1" />
+  <content location="./FROG/04_reaction_deletion.tsv" format="https://identifiers.org/combine.specifications:frog-reactiondeletion-version-1" />
+  <content location="./FROG/03_gene_deletion.tsv" format="https://identifiers.org/combine.specifications:frog-genedeletion-version-1" />
+</omexManifest>

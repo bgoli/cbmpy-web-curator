@@ -13,12 +13,15 @@ except:
     # debugging hack
     print('{} does not seem to exist'.format(os.sys.argv[1]))
 
+frog_curator = 'run-' + time.strftime('%m%d-%H%M')
+frog_date = time.strftime('%Y-%m-%d')
 
-def write_config(fpath, filename):
+
+def write_config(fpath, filename, frog_curator, frog_date, model_md5):
     config = {
-        "frog_date": "",
+        "frog_date": frog_date,
         "frog_version": "1.0",
-        "frog_curators": [],
+        "frog_curators": [frog_curator],
         "frog_software": {
             "name": "cbmpyweb offline-curator",
             "version": "0.1",
@@ -35,8 +38,8 @@ def write_config(fpath, filename):
             "version": "0.1",
             "url": ""
         },
-        "model_filename": "{}".format(filename),
-        "model_md5": "",
+        "model_filename": filename,
+        "model_md5": model_md5,
         "environment": "{} {} ({})".format(platform.system(), platform.release(), platform.architecture()[0]),
     }
 
@@ -50,7 +53,7 @@ roundoff_num = 6
 TOOL_ID = 'cbmpy'
 
 
-write_config(MODEL_DIR, "")
+write_config(MODEL_DIR, "", frog_curator, frog_date, "")
 
 if mfile is None:
     model_files = [m for m in os.listdir(MODEL_DIR) if m.endswith('.xml')]
@@ -71,9 +74,15 @@ for m_ in model_files:
     if not os.path.exists(RESULT_DIR):
         os.makedirs(RESULT_DIR)
 
+    model_md5 = CBCR.hashFileMd5(os.path.join(MODEL_DIR, m_))
+    import shutil
+
+
 
     if not os.path.exists(os.path.join(RESULT_DIR, 'metadata.json')):
-        write_config(RESULT_DIR, m_)
+        write_config(RESULT_DIR, m_, frog_curator, frog_date, model_md5)
+
+    shutil.copyfile(os.path.join(MODEL_DIR, m_), os.path.join(RESULT_DIR, m_))
 
     print('\n# Using\n{}\n{}\n'.format(MODEL_DIR, RESULT_DIR))
 
@@ -109,6 +118,9 @@ for m_ in model_files:
     T5 = time.time()
     report += 'Test reaction deletions: {:.2f}s\n'.format(T5 - T4)
     report += 'Total time: {:.2f}s\n'.format(T5 - T0)
+
+    # Add COMBINE archive stuff
+    _ = CBCR.addCombineMetadata(MODEL_DIR, RESULT_DIR, m_, frog_curator)
 
 report += '\n########################\n'
 
