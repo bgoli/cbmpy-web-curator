@@ -23,6 +23,15 @@ def hashFileMd5(fpath):
     print(digest)
     return digest
 
+def hashFileSha256(fpath):
+    sha_hash = hashlib.sha256()
+    a_file = open(fpath, 'rb')
+    content = a_file.read()
+    sha_hash.update(content)
+    digest = sha_hash.hexdigest()
+    print(digest)
+    return digest
+
 
 def readMetadata(fpath):
     with open(os.path.join(fpath, 'metadata.json'), 'r') as F:
