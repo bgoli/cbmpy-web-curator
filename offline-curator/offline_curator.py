@@ -20,23 +20,23 @@ frog_date = time.strftime('%Y-%m-%d')
 def write_config(fpath, filename, frog_curator, frog_date, model_md5, model_sha256):
     config = {
         "frog_date": frog_date,
-        "frog_version": "1.0",
+        "frog_version": "0.1.2",
         "frog_curators": [frog_curator],
-        "frog_software": {
-            "name": "cbmpyweb offline-curator",
-            "version": "0.1",
-            "url": "https://osf.io/t6mh3"
-        },
-
         "software": {
-            "name": "cbmpy",
-            "version": str(cbmpy.__version__),
-            "url": "https://systemsbioinformatics.github.io/cbmpy"
-        },
-        "solver": {
-            "name": "cbmpy",
-            "version": "0.1",
-            "url": ""
+            "frog": {
+                "name": "cbmpyweb offline-curator",
+                "version": "0.1",
+                "url": "https://osf.io/t6mh3"
+            },
+            "toolbox": {
+                "name": "cbmpy",
+                "version": str(cbmpy.__version__),
+                "url": "https://systemsbioinformatics.github.io/cbmpy"
+            },
+            "solver": {
+                "name": cbmpy.CBConfig.__CBCONFIG__['SOLVER_ACTIVE'],
+                "version": "unknown"
+            }
         },
         "model_filename": filename,
         "model_md5": model_md5,
