@@ -154,9 +154,7 @@ def testFVA(m, result_path, tool_id, sigfig=6, metadata=None, override_bin=cbmpy
                 mod_name,
                 m.getActiveObjective().getId(),
                 fids[r],
-                # my first choice is the flux value, but apparently the obj function value should be output
-                # round(fvals[r][0], sigfig),
-                obj_func_value,
+                round(fvals[r][0], sigfig),
                 solution_status,
                 round(fvals[r][2], sigfig),
                 round(fvals[r][3], sigfig),
