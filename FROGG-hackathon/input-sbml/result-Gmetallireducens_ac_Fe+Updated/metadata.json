@@ -1,0 +1,27 @@
+{
+ "frog_date": "2023-03-27",
+ "frog_version": "0.1.2",
+ "frog_curators": [
+  "run-0327-0024"
+ ],
+ "software": {
+  "frog": {
+   "name": "cbmpyweb offline-curator",
+   "version": "0.1",
+   "url": "https://osf.io/t6mh3"
+  },
+  "toolbox": {
+   "name": "cbmpy",
+   "version": "0.8.5",
+   "url": "https://systemsbioinformatics.github.io/cbmpy"
+  },
+  "solver": {
+   "name": "CPLEX",
+   "version": "unknown"
+  }
+ },
+ "model_filename": "Gmetallireducens_ac_Fe+Updated.xml",
+ "model_md5": "f285feef71ab036133c2f9936e361b5d",
+ "model_sha256": "75071dbb4f43175bea2c9735760697c358c29f07c46f8dd9387ce4577b37b8cd",
+ "environment": "Windows 10 (64bit)"
+}
