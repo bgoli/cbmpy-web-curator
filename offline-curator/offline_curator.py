@@ -17,29 +17,30 @@ frog_curator = 'run-' + time.strftime('%m%d-%H%M')
 frog_date = time.strftime('%Y-%m-%d')
 
 
-def write_config(fpath, filename, frog_curator, frog_date, model_md5):
+def write_config(fpath, filename, frog_curator, frog_date, model_md5, model_sha256):
     config = {
         "frog_date": frog_date,
-        "frog_version": "1.0",
+        "frog_version": "0.1.2",
         "frog_curators": [frog_curator],
-        "frog_software": {
-            "name": "cbmpyweb offline-curator",
-            "version": "0.1",
-            "url": "https://osf.io/t6mh3"
-        },
-
         "software": {
-            "name": "cbmpy",
-            "version": str(cbmpy.__version__),
-            "url": "https://systemsbioinformatics.github.io/cbmpy"
-        },
-        "solver": {
-            "name": "cbmpy",
-            "version": "0.1",
-            "url": ""
+            "frog": {
+                "name": "cbmpyweb offline-curator",
+                "version": "0.1",
+                "url": "https://osf.io/t6mh3"
+            },
+            "toolbox": {
+                "name": "cbmpy",
+                "version": str(cbmpy.__version__),
+                "url": "https://systemsbioinformatics.github.io/cbmpy"
+            },
+            "solver": {
+                "name": cbmpy.CBConfig.__CBCONFIG__['SOLVER_ACTIVE'],
+                "version": "unknown"
+            }
         },
         "model_filename": filename,
         "model_md5": model_md5,
+        "model_sha256": model_sha256,
         "environment": "{} {} ({})".format(platform.system(), platform.release(), platform.architecture()[0]),
     }
 
@@ -75,12 +76,13 @@ for m_ in model_files:
         os.makedirs(RESULT_DIR)
 
     model_md5 = CBCR.hashFileMd5(os.path.join(MODEL_DIR, m_))
+    model_sha256 = CBCR.hashFileSha256(os.path.join(MODEL_DIR, m_))
     import shutil
 
 
 
     if not os.path.exists(os.path.join(RESULT_DIR, 'metadata.json')):
-        write_config(RESULT_DIR, m_, frog_curator, frog_date, model_md5)
+        write_config(RESULT_DIR, m_, frog_curator, frog_date, model_md5, model_sha256)
 
     shutil.copyfile(os.path.join(MODEL_DIR, m_), os.path.join(RESULT_DIR, m_))
 
