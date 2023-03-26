@@ -54,7 +54,7 @@ roundoff_num = 6
 TOOL_ID = 'cbmpy'
 
 
-write_config(MODEL_DIR, "", frog_curator, frog_date, "")
+write_config(MODEL_DIR, "", frog_curator, frog_date, "", "")
 
 if mfile is None:
     model_files = [m for m in os.listdir(MODEL_DIR) if m.endswith('.xml')]
