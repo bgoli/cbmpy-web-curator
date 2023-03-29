@@ -1,5 +1,8 @@
-import os, time, json, hashlib
+import os, time, json, hashlib, zipfile
 import cbmpy
+
+__VERSION__ = 1.0
+
 
 # TODO TODO TODO # THIS NEEDS TO BE DONE VIA CONFIG
 # multicore python bin hack
@@ -365,8 +368,60 @@ def generateCOMBINEarchiveMetadata(tool_name, creator):
 </rdf:RDF>
 """.format(tool_name, creator, time.strftime('%Y-%m-%d %H:%M'), time.strftime('%Y-%m-%d %H:%M'))
 
+def f_zip_results(zfpath, model):
+    """
+    Create a zip archive of the contents of zfpath
+    """
+    mpath, arcname = os.path.split(zfpath)
+    arcname += '.zip'
+    model = model.replace('result-','')
+
+    print('#######################')
+    print(zfpath)
+    print(arcname)
+    print(mpath)
+    print(model)
+    print('#######################')
+
+    # adding combine stuff
+    addCombineMetadata(zfpath, zfpath, model, 'Software')
 
 
+    zf = zipfile.ZipFile(os.path.join(zfpath, arcname), mode='w', compression=zipfile.ZIP_DEFLATED)
+
+    zf.write(os.path.join(mpath, model), model)
+
+    for fn in os.listdir(zfpath):
+        print(fn)
+        if not fn.endswith('.zip'):
+            zf.write(os.path.join(zfpath, fn), fn)
+    zf.close()
+
+def f_create_omex(in_dir, out_dir, model_file):
+    """
+    Create a omex archive of the contents of zfpath
+    """
+    arcname = model_file + '.omex'
+
+    print('#######################')
+    print(in_dir)
+    print(out_dir)
+    print(model_file)
+    print(arcname)
+    print('#######################')
+
+    zf = zipfile.ZipFile(os.path.join(out_dir, arcname), mode='w', compression=zipfile.ZIP_DEFLATED)
+
+    #print(os.listdir(in_dir))
+    print(os.listdir(out_dir))
+    for fn in os.listdir(out_dir):
+        print(fn)
+        if fn.endswith('.zip') or fn.endswith('.omex'):
+            pass
+        else:
+            zf.write(os.path.join(out_dir, fn), fn)
+    zf.close()
+    print("\nOMEX: {}".format(os.path.join(out_dir, arcname)))
 
 
 

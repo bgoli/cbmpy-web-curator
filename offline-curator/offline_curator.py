@@ -2,6 +2,8 @@ import os, time, platform
 from app import cbmpycurator as CBCR
 import cbmpy
 
+__VERSION__ = '3.0'
+
 cDir = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 try:
     if os.sys.argv[1].endswith('.xml'):
@@ -18,6 +20,12 @@ frog_date = time.strftime('%Y-%m-%d')
 
 
 def write_config(fpath, filename, frog_curator, frog_date, model_md5, model_sha256):
+    if cbmpy.CBConfig.__CBCONFIG__['SOLVER_ACTIVE'] == 'CPLEX':
+        try:
+            solver_version = str(cbmpy.CBCPLEX.cplex.__version__)
+        except:
+            solver_version = "unknown"
+        
     config = {
         "frog_date": frog_date,
         "frog_version": "0.1.2",
@@ -25,7 +33,7 @@ def write_config(fpath, filename, frog_curator, frog_date, model_md5, model_sha2
         "software": {
             "frog": {
                 "name": "cbmpyweb offline-curator",
-                "version": "0.1",
+                "version": __VERSION__,
                 "url": "https://osf.io/t6mh3"
             },
             "toolbox": {
@@ -35,7 +43,7 @@ def write_config(fpath, filename, frog_curator, frog_date, model_md5, model_sha2
             },
             "solver": {
                 "name": cbmpy.CBConfig.__CBCONFIG__['SOLVER_ACTIVE'],
-                "version": "unknown"
+                "version": solver_version
             }
         },
         "model_filename": filename,
@@ -123,6 +131,9 @@ for m_ in model_files:
 
     # Add COMBINE archive stuff
     _ = CBCR.addCombineMetadata(MODEL_DIR, RESULT_DIR, m_, frog_curator)
+    
+    # create OMEX archive
+    CBCR.f_create_omex(RESULT_DIR, RESULT_DIR, m_)
 
 report += '\n########################\n'
 
