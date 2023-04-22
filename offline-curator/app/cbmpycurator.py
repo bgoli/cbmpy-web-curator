@@ -216,6 +216,7 @@ def testGeneDeletion(m, result_path, tool_id, sigfig=6, metadata=None):
         writeTSV(F, output)
     return output
 
+import math
 
 def testReactionDeletion(m, result_path, tool_id, sigfig=6, metadata=None):
     report_name = '04_reaction_deletion.tsv'
@@ -250,8 +251,8 @@ def testReactionDeletion(m, result_path, tool_id, sigfig=6, metadata=None):
                 res[r]['opt'],
             ]
         )
-        #if math.isnan(output[-1][-1]):
-            #output[-1][-1] = ''
+        if math.isnan(output[-1][-1]):
+            output[-1][-1] = ' '
 
     with open(os.path.join(result_path, report_name), 'w') as F:
         writeTSV(F, output)
