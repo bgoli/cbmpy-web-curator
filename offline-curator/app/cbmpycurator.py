@@ -1,4 +1,4 @@
-import os, time, json, hashlib, zipfile
+import os, time, json, hashlib, zipfile, math
 import cbmpy
 
 __VERSION__ = 1.0
@@ -122,17 +122,21 @@ def testFVA(m, result_path, tool_id, sigfig=6, metadata=None, override_bin=cbmpy
     # get the current obj value for output
     cbmpy.doFBA(m)
 
-    obj_func_value = ''
-    if m.SOLUTION_STATUS_INT == 1:
-        solution_status = 'optimal'
-        obj_func_value = round(m.getOptimalValue(), sigfig)
-    else:
-        solution_status = 'infeasible'
-        obj_func_value = ''
+    #obj_func_value = ''
+    #if m.SOLUTION_STATUS_INT == 1:
+        #solution_status = 'optimal'
+        #obj_func_value = round(m.getOptimalValue(), sigfig)
+    #else:
+        #solution_status = 'infeasible'
+        #obj_func_value = ''
 
 
     # do FVA
     optPercentage = 100.0
+
+    import multiprocessing
+    
+    multiprocessing.cpu_count
 
     if len(m.getReactionIds()) <= 1000:
         fvals, fids = cbmpy.doFVA(m, optPercentage=100.0)
@@ -144,12 +148,26 @@ def testFVA(m, result_path, tool_id, sigfig=6, metadata=None, override_bin=cbmpy
     ridmap = m.getReactionIds()
     ridmap.sort()
 
+    # set the "optimal" property where "optimal" is defined as, for each FVA evaluation, 
+    # at least one of the two numerical optimizations succeeded. 
     for r in range(len(fids)):
         r = fids.index(ridmap[r])
         if fvals[r][5] == 1 or fvals[r][6] == 1:
             solution_status = 'optimal'
         else:
             solution_status = 'infeasible'
+
+        # lets kill some nans
+        lval = fvals[r][2]
+        uval = fvals[r][3]
+        if not math.isnan(lval):
+            round(lval, sigfig)
+        else:
+            lval = ' '
+        if not math.isnan(uval):
+            round(uval, sigfig)
+        else:
+            uval = ' '
 
         output.append(
             [
@@ -159,8 +177,8 @@ def testFVA(m, result_path, tool_id, sigfig=6, metadata=None, override_bin=cbmpy
                 fids[r],
                 round(fvals[r][0], sigfig),
                 solution_status,
-                round(fvals[r][2], sigfig),
-                round(fvals[r][3], sigfig),
+                lval,
+                uval,
                 optPercentage/100.0
             ]
         )
@@ -181,9 +199,9 @@ def testGeneDeletion(m, result_path, tool_id, sigfig=6, metadata=None):
     solution_status = 'optimal'
 
     print(os.path.split(result_path))
-    mdata = readMetadata(os.path.split(result_path)[0])
-    if metadata is not None:
-        pass
+    #mdata = readMetadata(os.path.split(result_path)[0])
+    #if metadata is not None:
+        #pass
     if not os.path.exists(result_path):
         os.makedirs(result_path)
 
@@ -198,14 +216,12 @@ def testGeneDeletion(m, result_path, tool_id, sigfig=6, metadata=None):
     gidx = list(gene_dict.keys())
     gidx.sort()
     for g_ in gidx:
-        import math
-
         if not math.isnan(gene_dict[g_]):
             solution_status = 'optimal'
             value = round(gene_dict[g_], sigfig)
         else:
             solution_status = 'infeasible'
-            #value = ''
+            value = ' '
 
         output.append(
             #[mdata['software.name'], mod_name, m.getActiveObjective().getId(), g_, solution_status, value]
@@ -215,8 +231,6 @@ def testGeneDeletion(m, result_path, tool_id, sigfig=6, metadata=None):
     with open(os.path.join(result_path, report_name), 'w') as F:
         writeTSV(F, output)
     return output
-
-import math
 
 def testReactionDeletion(m, result_path, tool_id, sigfig=6, metadata=None):
     report_name = '04_reaction_deletion.tsv'
