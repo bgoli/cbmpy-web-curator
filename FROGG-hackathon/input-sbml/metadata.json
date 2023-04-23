@@ -1,0 +1,27 @@
+{
+ "frog_date": "2023-04-23",
+ "frog_version": "0.1.2",
+ "frog_curators": [
+  "run-0423-1524"
+ ],
+ "software": {
+  "frog": {
+   "name": "cbmpyweb offline-curator",
+   "version": "3.0",
+   "url": "https://osf.io/t6mh3"
+  },
+  "toolbox": {
+   "name": "cbmpy",
+   "version": "0.8.5",
+   "url": "https://systemsbioinformatics.github.io/cbmpy"
+  },
+  "solver": {
+   "name": "CPLEX",
+   "version": "22.1.0.0"
+  }
+ },
+ "model_filename": "",
+ "model_md5": "",
+ "model_sha256": "",
+ "environment": "Windows 10 (64bit)"
+}
