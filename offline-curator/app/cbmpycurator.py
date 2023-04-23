@@ -141,9 +141,9 @@ def testFVA(m, result_path, tool_id, sigfig=6, metadata=None, override_bin=cbmpy
     if len(m.getReactionIds()) <= 1000:
         fvals, fids = cbmpy.doFVA(m, optPercentage=100.0)
     elif len(m.getReactionIds()) <= 3000:
-        fvals, fids = cbmpy.CBMultiCore.runMultiCoreFVA(m, procs=8, override_bin=override_bin, optPercentage=100.0)
+        fvals, fids = cbmpy.CBMultiCore.runMultiCoreFVA(m, procs=6, override_bin=override_bin, optPercentage=100.0)
     else:
-        fvals, fids = cbmpy.CBMultiCore.runMultiCoreFVA(m, procs=8, override_bin=override_bin, optPercentage=100.0)
+        fvals, fids = cbmpy.CBMultiCore.runMultiCoreFVA(m, procs=6, override_bin=override_bin, optPercentage=100.0)
 
     ridmap = m.getReactionIds()
     ridmap.sort()
@@ -212,7 +212,8 @@ def testGeneDeletion(m, result_path, tool_id, sigfig=6, metadata=None):
     gene_dict = {}
     for r_ in res:
         if r_[0] != 'wt':
-            gene_dict[m.getGene(r_[0]).getLabel()] = r_[1]
+            #gene_dict[m.getGene(r_[0]).getLabel()] = r_[1]
+            gene_dict[m.getGene(r_[0]).getId()] = r_[1]
     gidx = list(gene_dict.keys())
     gidx.sort()
     for g_ in gidx:
