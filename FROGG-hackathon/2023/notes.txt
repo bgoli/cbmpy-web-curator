@@ -1,0 +1,7 @@
+combine archive
+- model.xml
+- manifest.xml
+- manifest.rdf
+- FROG/*
+
+implemented in v6 

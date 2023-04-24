@@ -1,7 +1,7 @@
 import os, time, json, hashlib, zipfile, math
 import cbmpy
 
-__VERSION__ = 1.0
+__VERSION__ = 6.0
 
 
 # TODO TODO TODO # THIS NEEDS TO BE DONE VIA CONFIG
@@ -434,6 +434,8 @@ def f_create_omex(in_dir, out_dir, model_file):
         print(fn)
         if fn.endswith('.zip') or fn.endswith('.omex'):
             pass
+        elif fn not in [model_file, 'metadata.rdf', 'manifest.xml']:
+            zf.write(os.path.join(out_dir, fn), os.path.join('frog', fn))
         else:
             zf.write(os.path.join(out_dir, fn), fn)
     zf.close()
