@@ -2,7 +2,7 @@ import os, time, platform
 from app import cbmpycurator as CBCR
 import cbmpy
 
-__VERSION__ = '3.0'
+__VERSION__ = '6.0'
 
 cDir = os.path.dirname(os.path.abspath(os.sys.argv[0]))
 try:
@@ -25,7 +25,7 @@ def write_config(fpath, filename, frog_curator, frog_date, model_md5, model_sha2
             solver_version = str(cbmpy.CBCPLEX.cplex.__version__)
         except:
             solver_version = "unknown"
-        
+
     config = {
         "frog_date": frog_date,
         "frog_version": "0.1.2",
@@ -131,7 +131,7 @@ for m_ in model_files:
 
     # Add COMBINE archive stuff
     _ = CBCR.addCombineMetadata(MODEL_DIR, RESULT_DIR, m_, frog_curator)
-    
+
     # create OMEX archive
     CBCR.f_create_omex(RESULT_DIR, RESULT_DIR, m_)
 

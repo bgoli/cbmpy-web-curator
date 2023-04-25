@@ -135,7 +135,7 @@ def testFVA(m, result_path, tool_id, sigfig=6, metadata=None, override_bin=cbmpy
     optPercentage = 100.0
 
     import multiprocessing
-    
+
     multiprocessing.cpu_count
 
     if len(m.getReactionIds()) <= 1000:
@@ -148,8 +148,8 @@ def testFVA(m, result_path, tool_id, sigfig=6, metadata=None, override_bin=cbmpy
     ridmap = m.getReactionIds()
     ridmap.sort()
 
-    # set the "optimal" property where "optimal" is defined as, for each FVA evaluation, 
-    # at least one of the two numerical optimizations succeeded. 
+    # set the "optimal" property where "optimal" is defined as, for each FVA evaluation,
+    # at least one of the two numerical optimizations succeeded.
     for r in range(len(fids)):
         r = fids.index(ridmap[r])
         if fvals[r][5] == 1 or fvals[r][6] == 1:
@@ -337,17 +337,17 @@ def generateCombineArchiveManifest(in_dir, out_dir, model_file):
             if f_ == 'metadata.rdf':
                 man_out += '<content location="./metadata.rdf" format="http://identifiers.org/combine.specifications/omex-metadata"/>\n'
             elif f_ == 'metadata.json':
-                man_out += ' <content location="./metadata.json" format="https://identifiers.org/combine.specifications:frog-metadata-version-1"/>\n'
+                man_out += ' <content location="./frog/metadata.json" format="https://identifiers.org/combine.specifications:frog-metadata-version-1"/>\n'
             elif f_ == 'curation-timings.txt':
                 man_out += ' <content location="./curation-timings.txt" format="text/plain"/>\n'
             elif f_ == '01_objective.tsv':
-                man_out += ' <content location="./01_objective.tsv" format="https://identifiers.org/combine.specifications:frog-objective-version-1"/>\n'
+                man_out += ' <content location="./frog/01_objective.tsv" format="https://identifiers.org/combine.specifications:frog-objective-version-1"/>\n'
             elif f_ == '02_fva.tsv':
-                man_out += ' <content location="./02_fva.tsv" format="https://identifiers.org/combine.specifications:frog-fva-version-1"/>\n'
+                man_out += ' <content location="./frog/02_fva.tsv" format="https://identifiers.org/combine.specifications:frog-fva-version-1"/>\n'
             elif f_ == '03_gene_deletion.tsv':
-                man_out += ' <content location="./03_gene_deletion.tsv" format="https://identifiers.org/combine.specifications:frog-genedeletion-version-1"/>\n'
+                man_out += ' <content location="./frog/03_gene_deletion.tsv" format="https://identifiers.org/combine.specifications:frog-genedeletion-version-1"/>\n'
             elif f_ == '04_reaction_deletion.tsv':
-                man_out += ' <content location="./04_reaction_deletion.tsv" format="https://identifiers.org/combine.specifications:frog-reactiondeletion-version-1"/>\n'
+                man_out += ' <content location="./frog/04_reaction_deletion.tsv" format="https://identifiers.org/combine.specifications:frog-reactiondeletion-version-1"/>\n'
     man_out += ' <content location="./{}" format="https://identifiers.org/combine.specifications:sbml" master="true"/>\n'.format(model_file)
     man_out += "</omexManifest>\n"
     return man_out
